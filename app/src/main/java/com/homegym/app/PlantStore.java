@@ -18,6 +18,7 @@ import java.util.Locale;
 final class PlantStore {
 
     private static final String PREF = "plant";
+    static final long SPARKLE_MS = 3000;
 
     static long today() {
         return LocalDate.now().toEpochDay();
@@ -37,6 +38,8 @@ final class PlantStore {
         e.start = p.getLong("start", -1);
         e.resolved = p.getLong("resolved", -1);
         e.done = p.getLong("done", -1);
+        e.recovDay = p.getLong("recovDay", -1);
+        e.sparkleUntil = p.getLong("sparkleUntil", 0);
         for (String s : p.getString("collection", "").split(",")) {
             if (!s.isEmpty()) e.collection.add(s);
         }
@@ -55,13 +58,18 @@ final class PlantStore {
                 .putLong("start", e.start)
                 .putLong("resolved", e.resolved)
                 .putLong("done", e.done)
+                .putLong("recovDay", e.recovDay)
+                .putLong("sparkleUntil", e.sparkleUntil)
                 .putString("collection", String.join(",", e.collection))
                 .apply();
     }
 
     static synchronized void complete(Context c) {
         PlantEngine e = load(c);
-        if (e.complete(today())) save(c, e);
+        if (e.complete(today())) {
+            if (e.recovDay == today()) e.sparkleUntil = System.currentTimeMillis() + SPARKLE_MS;
+            save(c, e);
+        }
     }
 
     static String framePath(String plantId, int frame) {

@@ -21,6 +21,8 @@ public final class PlantEngine {
     long start = -1;        // ngày gieo đầu tiên (không bị phạt)
     long resolved = -1;     // ngày cuối đã chốt sổ
     long done = -1;         // ngày gần nhất đã tính buổi tập
+    long recovDay = -1;     // ngày gần nhất buổi tập dùng để cứu cây đang héo
+    long sparkleUntil = 0;  // mốc (ms) kết thúc hiệu ứng lấp lánh khi cứu cây; PlantStore đặt
     final List<String> collection = new ArrayList<>(); // "idCây:ngàyNhận"
 
     /** Lịch trong index.html (WK): Thứ 2 đến Thứ 7, Chủ nhật nghỉ. Đổi lịch thì sửa cả ở đây. */
@@ -54,6 +56,7 @@ public final class PlantEngine {
         if (done >= today) return false;
         done = today;
         miss = 0;
+        if (frame > FULL) recovDay = today;
         if (!mature) {
             frame++;
             if (frame >= FULL) {
@@ -116,5 +119,38 @@ public final class PlantEngine {
         else t = "Đang lớn " + frame + "/" + FULL;
         if (done == today) return "✔ " + t;
         return t;
+    }
+
+    // ---------- Widget ----------
+
+    /** Widget tối đi khi hôm nay là ngày tập mà chưa tập. Ngày nghỉ thì không tối. */
+    boolean isDim(long today) {
+        return done != today && isTrainingDay(today);
+    }
+
+    /** Widget sáng lên khi đã tập hôm nay. */
+    boolean isLit(long today) {
+        return done == today;
+    }
+
+    static final int SPARKLE_NONE = 0, SPARKLE_ALWAYS = 1, SPARKLE_TIMED = 2;
+
+    /** Đã tập hôm nay: lấp lánh cả ngày; nếu buổi tập là để cứu cây héo thì chỉ lấp lánh tới sparkleUntil. */
+    int sparkle(long today, long nowMs) {
+        if (done != today) return SPARKLE_NONE;
+        if (recovDay != today) return SPARKLE_ALWAYS;
+        return nowMs < sparkleUntil ? SPARKLE_TIMED : SPARKLE_NONE;
+    }
+
+    /** Nhãn trạng thái cây hiển thị ngoài widget. */
+    String widgetLabel(long today) {
+        if (frame > FULL) {
+            int w = frame - FULL;
+            if (w <= 4) return "Héo nhẹ";
+            if (w <= 10) return "Đang héo";
+            return "Sắp chết";
+        }
+        if (isDim(today)) return "Ủ rũ";
+        return "Đã được chăm sóc";
     }
 }
