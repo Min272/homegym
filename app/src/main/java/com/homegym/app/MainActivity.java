@@ -26,6 +26,7 @@ public class MainActivity extends Activity {
     private static final int REQ_CAMERA = 1001;
 
     private WebView web;
+    private TtsBridge tts;
     private PermissionRequest pendingRequest;
 
     @Override
@@ -50,6 +51,8 @@ public class MainActivity extends Activity {
         s.setAllowContentAccess(false);
 
         web.addJavascriptInterface(new PlantBridge(this), "PlantBridge");
+        tts = new TtsBridge(this);
+        web.addJavascriptInterface(tts, "TtsBridge");
 
         web.setWebViewClient(new WebViewClient() {
             @Override
@@ -157,6 +160,7 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onDestroy() {
+        if (tts != null) tts.shutdown();
         if (web != null) web.destroy();
         super.onDestroy();
     }

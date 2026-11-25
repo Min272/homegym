@@ -91,7 +91,7 @@ let CFG=Object.assign({bw:65,rest:45,voice:true,alt:false,cn:2,cs:180},store.get
 let cheerTok=0;
 const escH=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const cdel=()=>CFG.cs>0?CFG.cs*(.7+Math.random()*.6):1e9;
-const say=(t,c)=>{if(!CFG.voice||!window.speechSynthesis)return;if(!c&&cheerTok)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='vi-VN';if(c){const k=++cheerTok,f=()=>{if(cheerTok===k)cheerTok=0};u.onend=f;u.onerror=f;setTimeout(f,15000)}speechSynthesis.speak(u)};
+const say=(t,c)=>{if(CFG.voice&&window.TtsBridge){if(!c&&cheerTok)return;TtsBridge.speak(t);if(c){const k=++cheerTok;setTimeout(()=>{if(cheerTok===k)cheerTok=0},Math.min(15000,1500+t.length*90))}return}if(!CFG.voice||!window.speechSynthesis)return;if(!c&&cheerTok)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='vi-VN';if(c){const k=++cheerTok,f=()=>{if(cheerTok===k)cheerTok=0};u.onend=f;u.onerror=f;setTimeout(f,15000)}speechSynthesis.speak(u)};
 /* ===== Hình học tư thế ===== */
 const VIS=.5;let VW=480,VH=360;
 const PTS={knee:[[23,25,27],[24,26,28]],elbow:[[11,13,15],[12,14,16]],hip:[[11,23,25],[12,24,26]],body:[[11,23,27],[12,24,28]],abd:[[23,11,13],[24,12,14]]};

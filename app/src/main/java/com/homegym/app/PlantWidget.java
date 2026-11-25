@@ -85,7 +85,7 @@ public class PlantWidget extends AppWidgetProvider {
             v.setInt(R.id.plant_root, "setBackgroundResource",
                     dim ? R.drawable.widget_bg_dark : lit ? R.drawable.widget_bg_lit : R.drawable.widget_bg);
             int pad = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                    compact ? 4 : 8, c.getResources().getDisplayMetrics());
+                    compact ? 2 : 4, c.getResources().getDisplayMetrics());
             v.setViewPadding(R.id.plant_root, pad, pad, pad, pad);
 
             v.setTextViewText(R.id.plant_text, label);
