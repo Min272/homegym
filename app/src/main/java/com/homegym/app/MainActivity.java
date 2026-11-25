@@ -49,6 +49,8 @@ public class MainActivity extends Activity {
         s.setAllowFileAccess(false);
         s.setAllowContentAccess(false);
 
+        web.addJavascriptInterface(new PlantBridge(this), "PlantBridge");
+
         web.setWebViewClient(new WebViewClient() {
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
@@ -143,6 +145,8 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
         web.onResume();
+        PlantWidget.refresh(this);
+        web.evaluateJavascript("window.plantRefresh&&plantRefresh()", null);
     }
 
     @Override

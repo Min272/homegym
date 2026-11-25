@@ -58,6 +58,8 @@ img.ni{height:clamp(56px,11cqw,110px);width:auto;flex-shrink:0;background:#fff;b
 .msg{min-height:52px;margin:10px 0;padding:10px 12px;border-radius:10px;background:var(--bg);border-left:4px solid var(--ok)}.msg.bad{border-color:var(--wn);color:var(--wn)}
 .sum li{margin:4px 0}.stats{display:flex;gap:10px;flex-wrap:wrap}.stats div{background:var(--bg);border-radius:10px;padding:8px 14px;font-size:13px;color:var(--mu)}.stats b{display:block;font:800 24px 'Barlow Condensed',sans-serif;color:var(--tx)}
 .hd{display:flex;gap:14px;align-items:center}
+.plant{display:flex;gap:14px;align-items:center;background:var(--cd);border:1px solid var(--ln);border-radius:14px;padding:12px}.plant img{width:121px;height:121px;background:#fff;border-radius:10px;flex-shrink:0}.plant b{display:block}.plant button{margin-top:8px}
+.coll{display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:10px}.coll figure{margin:0;background:#fff;color:#101923;border-radius:12px;padding:6px;text-align:center;font-size:12px;line-height:1.3}.coll img{width:100%;aspect-ratio:1;object-fit:contain}
 /* ===== Màn hình dọc / điện thoại ===== */
 @media (max-width:600px){main{padding:14px}h1{font-size:34px}.day{padding:14px 16px}.day b{font-size:22px}}
 @media (orientation:portrait){
@@ -276,15 +278,22 @@ function onTick(){if(!S||S.paused)return;if(S.ph==='demo'){S.dm+=.25;if(S.dm>=5)
 function endSet(){if(!S||S.ph!=='work')return;const e=exd();S.res.push({id:e.id,reps:e.t==='rep'?T.reps:0,secs:e.t==='rep'?0:Math.round(isTimer()?S.sec:T.hold),score:T.score});
  if(isTimer()&&S.set<item().sets){S.set++;toRest()}else{S.i++;S.set=1;S.i>=S.q.length?finish():toRest()}}
 function toRest(){S.ph='rest';S.ready=0;S.rest=EX[item().id].t==='timed'?10:CFG.rest;paint();say('Nghỉ ngơi')}
-function skipEx(){S.i++;S.set=1;S.i>=S.q.length?finish():toRest()}
+function skipEx(){S.skip=1;S.i++;S.set=1;S.i>=S.q.length?finish():toRest()}
 function quit(){unwake();const dur=Math.round((Date.now()-S.t0)/1000),reps=S.res.reduce((a,r)=>a+r.reps,0);if(dur>20&&S.res.length){const h=store.get('h',[]);h.push({d:new Date().toLocaleDateString('sv-SE'),dur,reps,kcal:Math.round(5*CFG.bw*dur/3600),score:null});store.set('h',h)}stopCam();S=null;if(window.speechSynthesis)speechSynthesis.cancel();home()}
 function finish(){unwake();stopCam();const dur=Math.round((Date.now()-S.t0)/1000),reps=S.res.reduce((a,r)=>a+r.reps,0),sc=S.res.filter(r=>r.score!=null).map(r=>r.score),
  score=sc.length?Math.round(sc.reduce((a,b)=>a+b)/sc.length):null,kcal=Math.round(5*CFG.bw*dur/3600),by={};S.res.forEach(r=>{by[r.id]=by[r.id]||{reps:0,secs:0};by[r.id].reps+=r.reps;by[r.id].secs+=r.secs});
  if(dur>20){const h=store.get('h',[]);h.push({d:new Date().toLocaleDateString('sv-SE'),dur,reps,kcal,score});store.set('h',h)}
+ const grow=!S.skip&&dur>20;if(grow&&window.PlantBridge)PlantBridge.completeSession();const gnote=!window.PlantBridge?'':grow?'🌱 Buổi tập đã được tính cho cây.':'Có bài bị bỏ qua (hoặc buổi quá ngắn) nên cây chưa được tính.';
  S=null;const dn=DONE.length?DONE[Math.floor(Math.random()*DONE.length)]:'';say('Hoàn thành buổi tập. '+dn,dn?1:0);$('#app').className='';document.body.classList.remove('in');
  $('#app').innerHTML=`<div class="panel"><h2>Hoàn thành buổi tập</h2>${dn?`<p style="font-weight:600;margin:8px 0 0">${escH(dn)}</p>`:''}<div class="stats" style="margin:12px 0"><div><b>${Math.round(dur/60)}</b>phút</div><div><b>${reps}</b>rep</div><div><b>${kcal}</b>kcal ước tính</div><div><b>${score??'–'}</b>điểm form</div></div>
+ <p class="mu">${gnote}</p>
  <ul class="sum">${Object.entries(by).map(([id,r])=>`<li>${EX[id].e} ${EX[id].n}: ${r.reps?r.reps+' rep':r.secs+' giây'}</li>`).join('')}</ul><div class="row"><button class="pri" onclick="home()">Về lịch tập</button></div></div>`}
 function camOff(){}
+/* ===== Cây tập luyện (dữ liệu do phần Java quản lý, xem PlantEngine.java) ===== */
+function plantHtml(){if(!window.PlantBridge)return'';const p=JSON.parse(PlantBridge.state());if(!p)return'';
+ return`<h3>Cây của bạn</h3><div class="plant"><img src="${p.img}" alt="${p.name}"><div><b>${p.name}</b><span class="mu">${p.status}</span><br><button onclick="PlantBridge.pinWidget()">Thêm widget ra màn hình</button></div></div>
+ <h3>Bộ sưu tập<small>${p.collection.length} cây</small></h3>${p.collection.length?`<div class="coll">${p.collection.map(c=>`<figure><img src="${c.img}" alt="${c.name}"><b>${c.name}</b><br>${c.date}</figure>`).join('')}</div>`:'<p class="mu">Chưa có cây nào. Nuôi cây tới khung 54 rồi giữ tươi thêm 7 ngày để nhận.</p>'}`}
+function plantRefresh(){const b=$('#plantBox');if(b&&!S)b.innerHTML=plantHtml()}
 /* ===== Giao diện ===== */
 const closeM=()=>{$('#modal').hidden=true};
 function openCfg(){$('#modal').hidden=false;$('#modal').innerHTML=`<div class="sheet"><h2>Cài đặt</h2>
@@ -315,6 +324,6 @@ function sayCheer(){if(!S||!CHEER.length)return;if(!S.cu)S.cu=new Set();if(S.cu.
 setInterval(()=>{if(!S||S.ph!=='work'||S.paused)return;if(!S.cn){S.cn=cdel();S.ct=0}if(++S.ct>=S.cn){const e=exd(),it=item(),per=e.t==='rep'?it.reps:it.secs,pos=e.t==='rep'?T.reps:e.t==='hold'?Math.floor(T.hold):Math.floor((S.set-1)*it.secs+S.sec);S.cw=(S.cw||0)+1;if(!nearB(pos,per)||S.cw>=30)sayCheer()}},1000);
 function enc(){const n=new Date(),d=Math.floor(Date.UTC(n.getFullYear(),n.getMonth(),n.getDate())/864e5);return EN[d%EN.length]}
 function quote(){const n=new Date(),d=Math.floor(Date.UTC(n.getFullYear(),n.getMonth(),n.getDate())/864e5),td=(n.getDay()+6)%7,k=WK.findIndex(w=>[].concat(w.w).includes(td)),a=QT[k<0?QT.length-1:k%(QT.length-1)];return a[Math.floor(d/7)%a.length]}
-function home(){$('#app').className='';document.body.classList.remove('in');$('#app').innerHTML=`<h1>Lịch tập <em>tuần này</em></h1><p class="mu">${quote().replace(/[.!]+$/,'')}${EN.length?', '+escH(enc().replace(/^./,c=>c.toLowerCase())):''}</p><p class="tipb">${todayNote()}</p>${weekHtml()}`}
+function home(){$('#app').className='';document.body.classList.remove('in');$('#app').innerHTML=`<h1>Lịch tập <em>tuần này</em></h1><p class="mu">${quote().replace(/[.!]+$/,'')}${EN.length?', '+escH(enc().replace(/^./,c=>c.toLowerCase())):''}</p><p class="tipb">${todayNote()}</p>${weekHtml()}<div id="plantBox">${plantHtml()}</div>`}
 $('#cfgb').onclick=openCfg;$('#modal').onclick=e=>{if(e.target.id==='modal'){camOff();closeM()}};home();
 </script></body></html>
