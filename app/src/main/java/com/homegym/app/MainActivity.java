@@ -50,7 +50,7 @@ public class MainActivity extends Activity {
         s.setAllowFileAccess(false);
         s.setAllowContentAccess(false);
 
-        web.addJavascriptInterface(new PlantBridge(this), "PlantBridge");
+        web.addJavascriptInterface(new DuckBridge(this), "DuckBridge");
         tts = new TtsBridge(this);
         web.addJavascriptInterface(tts, "TtsBridge");
 
@@ -149,7 +149,7 @@ public class MainActivity extends Activity {
         super.onResume();
         web.onResume();
         PlantWidget.refresh(this);
-        web.evaluateJavascript("window.plantRefresh&&plantRefresh()", null);
+        web.evaluateJavascript("window.duckRefresh&&duckRefresh()", null);
     }
 
     @Override
