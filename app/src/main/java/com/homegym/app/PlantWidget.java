@@ -23,7 +23,7 @@ public class PlantWidget extends AppWidgetProvider {
             R.drawable.duck_tired_0, R.drawable.duck_tired_1, R.drawable.duck_tired_2, R.drawable.duck_tired_3};
 
     /** Thời gian mỗi khung (ms): vịt khỏe nhanh nhẹn, vịt mệt chậm rãi. */
-    private static final int FIT_INTERVAL = 350, TIRED_INTERVAL = 650;
+    private static final int FIT_INTERVAL = 1050, TIRED_INTERVAL = 1950;
 
     @Override
     public void onUpdate(Context context, AppWidgetManager manager, int[] ids) {

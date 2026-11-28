@@ -74,6 +74,7 @@ img#fig{flex-basis:38%}
 }
 img.ghost{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;filter:invert(1);mix-blend-mode:screen;opacity:.32;pointer-events:none}
 .mg{margin:10px 0}.mg summary{cursor:pointer;font-weight:600}.mg textarea{width:100%;margin-top:8px;background:var(--bg);color:var(--tx);border:1px solid var(--ln);border-radius:8px;padding:8px;font:inherit;font-size:14px;resize:vertical}
+.fl{flex-direction:column;align-items:stretch;gap:4px}input[type=text],select{width:100%;background:var(--bg);color:var(--tx);border:1px solid var(--ln);border-radius:8px;padding:8px;font:inherit}
 </style></head><body>
 <header><b class="logo">HOME<span>GYM</span></b><nav><button id="cfgb" aria-label="Cài đặt">Cài đặt</button></nav></header>
 <main id="app"></main><div id="modal" hidden></div>
@@ -134,7 +135,7 @@ X('jack','Nhảy dang tay chân','⭐','cardio','Tay không','Toàn thân, tim m
  m:l=>{if(!seen(l,[0,11,12,15,16,27,28]))return null;const sw=Math.abs(l[11].x-l[12].x)||.1;return(l[15].y<l[0].y&&l[16].y<l[0].y?1:0)+(Math.abs(l[27].x-l[28].x)/sw>1.6?1:0)}});
 X('tri','Duỗi tay sau đầu','🔱','push','Hai tạ tay (hoặc một tạ hai tay)','Tay sau',['Đứng thẳng, giơ tạ lên cao, khuỷu hướng lên trần','Gập khuỷu hạ tạ ra sau đầu, giữ khuỷu cố định','Duỗi thẳng tay đưa tạ lên lại'],{perSide:1,v:'Đứng chính diện, thấy từ đầu tới hông',dir:-1,rest:v=>v>155,target:v=>v<85,good:80,m:(l,s)=>A(l,'elbow',s),iss:l=>lean(l)>20?['Siết bụng, đừng ưỡn lưng']:[]});
 Object.assign(EX.curl,{g:'curl'});
-EX.altcurl={...EX.curl,id:'altcurl',n:'Cuốn tạ luân phiên',e:'🔁',reps:20,alt:1,g:'altcurl',s:['Đứng thẳng, hai tạ hai bên hông, lòng bàn tay hướng trước','Cuốn một tạ lên vai, khuỷu sát thân, tay kia giữ yên','Hạ chậm rồi đổi sang tay kia, mỗi bên tính 1 rep (20 rep = mỗi tay 10)']};
+EX.altcurl={...EX.curl,id:'altcurl',n:'Cuốn tạ luân phiên',e:'🔁',reps:20,alt:1,g:'altcurl',s:['Đứng thẳng, hai tạ hai bên hông, lòng bàn tay hướng trước','Cuốn một tạ lên vai, khuỷu sát thân, tay kia giữ yên','Hạ chậm rồi đổi sang tay kia, mỗi bên tính 1 rep (60 rep = mỗi tay 30)']};
 X('fraise','Nâng tạ ra trước','🙋','push','Hai tạ tay','Vai trước',['Đứng thẳng, hai tạ trước đùi, khuỷu hơi cong','Nâng hai tay thẳng ra trước tới ngang vai','Hạ chậm, không ngả người lấy đà'],{g:'fraise',v:SIDE,dir:1,rest:v=>v<35,target:v=>v>75,good:80,m:l=>A(l,'abd'),
  iss:l=>{const a=A(l,'abd'),e=A(l,'elbow'),r=[];if(a!=null&&a>115)r.push('Chỉ nâng tới ngang vai');if(a!=null&&a>50&&e!=null&&e<110)r.push('Duỗi tay ra, đừng gập khuỷu nhiều');if(lean(l)>20)r.push('Đừng ngả người lấy đà');return r}});
 X('fly','Ép tạ nằm (Dumbbell Fly)','🦋','push','Hai tạ tay và ghế phẳng','Ngực giữa, vai trước',['Nằm ngửa trên ghế, hai tạ giơ thẳng trên ngực, khuỷu hơi cong','Mở hai tay sang hai bên theo vòng cung tới khi tạ ngang ngực','Siết ngực, khép tay về vị trí ban đầu, không hạ tạ quá thấp'],{g:'fly',v:'Đặt camera ở phía chân ghế, cao ngang ngực, thấy rõ vai và hai tay',dir:1,rest:v=>v<1.6,target:v=>v>2.4,good:2.5,
@@ -149,8 +150,8 @@ X('shrug','Nhún vai','🤷','pull','Hai tạ tay','Cơ thang, vai, lưng trên'
  iss:l=>{const e=A(l,'elbow');return e!=null&&e<140?['Giữ tay thẳng, chỉ nhún vai']:[]}});
 EX.dlrow={...EX.rdl,id:'dlrow',n:'Deadlift kéo tạ',g:'dlrow',s:['Đứng thẳng, hai tạ trước đùi','Đẩy hông ra sau, gối hơi cong, hạ tạ dọc theo chân, lưng phẳng','Siết mông để đứng thẳng lên','Kéo hai tạ lên ngang ngực, khuỷu dẫn ra ngoài, rồi hạ xuống']};
 EX.sumo={...EX.squat,id:'sumo',n:'Sumo squat',eq:'Ôm một tạ trước ngực',s:['Chân rộng gần gấp đôi vai, mũi chân mở khoảng 45°','Hạ hông thẳng xuống, lưng thẳng, gối theo hướng mũi chân','Siết mông để đứng lên']};
-EX.onerow={...EX.row,id:'onerow',n:'Kéo tạ một tay',e:'🚣',eq:'Một tạ tay và ghế hoặc giường để tì',reps:15,sets:4,alt:1,g:'onerow',s:['Một tay và một gối tì lên ghế, lưng phẳng, tay kia cầm tạ buông thẳng xuống','Kéo khuỷu ra sau và lên sát hông, siết bả vai 1 giây','Hạ tạ chậm tới khi duỗi gần hết tay, mỗi hiệp 15 cái chỉ một tay, hiệp lẻ tay phải, hiệp chẵn tay trái']};
-EX.onetri={...EX.tri,id:'onetri',n:'Duỗi tay sau đầu một tay',eq:'Một tạ tay',reps:20,alt:1,g:'onetri',s:['Đứng thẳng, một tay giơ tạ lên cao, tay kia chống hông, khuỷu hướng lên trần','Gập khuỷu hạ tạ ra sau đầu, giữ khuỷu cố định sát tai','Duỗi thẳng tay đưa tạ lên lại, xong một bên thì đổi tay (20 rep = mỗi tay 10)']};
+EX.onerow={...EX.row,id:'onerow',n:'Kéo tạ một tay',e:'🚣',eq:'Một tạ tay và ghế hoặc giường để tì',reps:15,sets:4,alt:1,g:'onerow',s:['Một tay và một gối tì lên ghế, lưng phẳng, tay kia cầm tạ buông thẳng xuống','Kéo khuỷu ra sau và lên sát hông, siết bả vai 1 giây','Hạ tạ chậm tới khi duỗi gần hết tay, bắt đầu tay phải, cứ 15 rep đổi tay']};
+EX.onetri={...EX.tri,id:'onetri',n:'Duỗi tay sau đầu một tay',eq:'Một tạ tay',reps:20,alt:1,g:'onetri',s:['Đứng thẳng, một tay giơ tạ lên cao, tay kia chống hông, khuỷu hướng lên trần','Gập khuỷu hạ tạ ra sau đầu, giữ khuỷu cố định sát tai','Duỗi thẳng tay đưa tạ lên lại, bắt đầu tay phải, cứ 10 rep đổi tay']};
 X('sup','Superman giữ','🦸','pull','Tay không','Lưng dưới, mông',['Nằm sấp, hai tay duỗi về trước','Nâng tay, ngực và chân khỏi sàn, nhìn xuống','Giữ yên, thở đều'],{t:'timed',sets:1,secs:30,v:'Không cần camera'});
 /* ===== Nới lỏng ngưỡng form (chỉ các bài trong lịch tập) ===== */
 (()=>{const L=(id,o)=>Object.assign(EX[id],o);
@@ -167,13 +168,55 @@ L('onetri',{rest:v=>v>150,target:v=>v<100,good:95,iss:l=>lean(l)>30?['Siết b�
 L('goblet',{rest:v=>v>1.3,target:v=>v<1.1,good:.95,iss:l=>{const r=[],k=H(l);if(k!=null&&k<1.5&&seen(l,[25,26,27,28])){const kg=Math.abs(l[25].x-l[26].x),ag=Math.abs(l[27].x-l[28].x);if(ag>.05&&kg<ag*.6)r.push('Đẩy gối ra ngoài, đừng chụm vào')}return r}});
 L('dlrow',{rest:v=>v>.45,target:v=>v<.37,good:.33});
 })();
+/* ===== Bài tập tự thêm: vùng tác động -> kiểu nhận diện camera (mượn bộ đếm của bài có sẵn) ===== */
+const KIND={dbpress:'Nằm đẩy lên (gập/duỗi khuỷu)',fly:'Nằm mở rồi ép hai tay',pushup:'Hít đất',pull:'Nằm vòng tay qua đầu (pullover)',
+press:'Đẩy qua đầu',lat:'Nâng tay sang ngang',fraise:'Nâng tay ra trước',rflye:'Cúi người mở hai tay',shrug:'Nhún vai',
+onerow:'Cúi người kéo tạ',dlrow:'Gập hông (deadlift)',curl:'Cuốn tay (gập khuỷu)',altcurl:'Cuốn tay luân phiên',onetri:'Duỗi tay sau đầu',
+goblet:'Squat',lunge:'Bước chùng (lunge)',bridge:'Nằm nâng hông',crunch:'Gập bụng',plank:'Giữ plank (tính giây)',jack:'Nhảy dang tay chân',
+none:'Không dùng camera (đếm giờ)'};
+const AREAS={chest:['Ngực','💪',['dbpress','fly','pushup','pull']],
+shoulder:['Vai','🙌',['press','lat','fraise','rflye','shrug']],
+back:['Lưng','🚣',['onerow','rflye','pull','shrug','dlrow']],
+biceps:['Tay trước','🦾',['curl','altcurl']],
+triceps:['Tay sau','🔱',['onetri','pushup','dbpress']],
+legs:['Đùi, mông','🦵',['goblet','lunge','dlrow','bridge']],
+core:['Bụng, core','🎯',['crunch','plank']],
+cardio:['Toàn thân, cardio','⭐',['jack','goblet']],
+other:['Khác','🔄',[]]};
+const kindsOf=a=>[...AREAS[a][2],'none'];
+let CUS=[].concat(store.get('custom',[])).filter(c=>c&&AREAS[c.area]&&KIND[c.kind]);
+const cleanName=t=>String(t).replace(/[<>&"]/g,'').trim().slice(0,40);
+const isSecs=k=>k==='none'||k==='plank';
+function regCustom(c){const[area,icon]=AREAS[c.area],own={id:c.id,n:cleanName(c.name),e:icon,m_area:area,sets:1};
+ if(c.kind==='none'){EX[c.id]={...own,t:'timed',secs:c.target,reps:0,s:['Tập đều, giữ nhịp thở'],v:'Không cần camera'};return}
+ const b=EX[c.kind];EX[c.id]={...b,id:c.id,n:own.n,e:icon,sets:1,base:c.kind,alt:b.alt,[b.t==='hold'?'secs':'reps']:c.target}}
+CUS.forEach(regCustom);
+const cusLabel=c=>AREAS[c.area][0]+' · '+KIND[c.kind]+' · '+c.target+(isSecs(c.kind)?' giây':' rep');
+function customHtml(){return`<h3>Bài tập của tôi</h3><div class="ex">${CUS.map(c=>`<div class="day"><b>${AREAS[c.area][1]} ${EX[c.id].n}</b><span class="mu">${cusLabel(c)}</span><div class="row" style="margin:0"><button class="pri" onclick="start([wit('${c.id}')])">Tập</button><button onclick="delCustom('${c.id}')">Xóa</button></div></div>`).join('')||'<p class="mu">Chưa có bài nào.</p>'}</div><div class="row">${CUS.length>1?'<button class="pri" onclick="start(CUS.map(c=>wit(c.id)))">Tập tất cả</button>':''}<button onclick="openAdd()">+ Thêm bài tập</button></div>`}
+function openAdd(){$('#modal').hidden=false;$('#modal').innerHTML=`<div class="sheet"><h2>Thêm bài tập</h2>
+<label class="fl">Tên bài<input type="text" id="a_name" maxlength="40" placeholder="Ví dụ: Hammer curl"></label>
+<label class="fl">Vùng tác động<select id="a_area" onchange="fillKinds()">${Object.entries(AREAS).map(([k,v])=>`<option value="${k}">${v[0]}</option>`).join('')}</select></label>
+<label class="fl">Kiểu nhận diện camera<select id="a_kind" onchange="kindHint()"></select></label>
+<p class="tip" id="a_hint"></p>
+<label><span id="a_unit"></span><input type="number" id="a_target" min="1" max="999" inputmode="numeric"></label>
+<div class="row"><button class="pri" onclick="saveCustom()">Lưu bài</button><button onclick="closeM()">Đóng</button></div></div>`;fillKinds()}
+function fillKinds(){$('#a_kind').innerHTML=kindsOf($('#a_area').value).map(k=>`<option value="${k}">${KIND[k]}</option>`).join('');kindHint()}
+function kindHint(){const k=$('#a_kind').value;$('#a_hint').textContent=k==='none'?'Không cần camera, app chỉ đếm giờ.':'Chọn kiểu giống chuyển động của bài nhất. Cách đặt camera: '+EX[k].v+'.';
+ $('#a_unit').textContent=isSecs(k)?'Số giây':'Tổng số rep';$('#a_target').value=isSecs(k)?30:36}
+function saveCustom(){const name=cleanName($('#a_name').value),target=parseInt($('#a_target').value);
+ if(!name){alert('Hãy nhập tên bài tập.');return}if(!(target>=1&&target<=999)){alert('Nhập số từ 1 đến 999.');return}
+ const c={id:'c_'+Date.now(),name,area:$('#a_area').value,kind:$('#a_kind').value,target};CUS.push(c);regCustom(c);store.set('custom',CUS);closeM();home()}
+function delCustom(id){if(!confirm('Xóa bài tập này?'))return;CUS=CUS.filter(c=>c.id!==id);delete EX[id];store.set('custom',CUS);home()}
 /* ===== Lịch tuần ===== */
-const wit=it=>{const[id,s,r]=Array.isArray(it)?it:[it],e=EX[id];return{id,sets:s||e.sets,reps:e.t==='rep'?(r||e.reps):e.reps,secs:e.t==='rep'?e.secs:(r||e.secs)}};
+const SWAP={onerow:15,onetri:10};
+const wit=it=>{const[id,s,r]=Array.isArray(it)?it:[it],e=EX[id],n=s||e.sets;
+ if(e.t==='timed')return{id,sets:n,reps:e.reps,secs:r||e.secs};
+ return{id,sets:1,reps:e.t==='rep'?n*(r||e.reps):e.reps,secs:e.t==='hold'?n*(r||e.secs):e.secs}};
 const WK=[
 {w:[0,3],d:'Thứ 2, 5',t:'Ngực, tay trước',l:[['dbpress',3,12],['fly',3,12],['pull',3,12],['curl',3,12],['altcurl',3,20]]},
 {w:[1,4],d:'Thứ 3, 6',t:'Vai, lưng, tay sau',l:[['fraise',3,12],['rflye',3,12],['shrug',3,15],['onerow',4,15],['onetri',3,20]]},
 {w:[2,5],d:'Thứ 4, 7',t:'Mông, chân, bụng',l:[['goblet',3,12],['dlrow',3,12]]}];
-function openDay(i){const w=WK[i],q=w.l.map(wit);$('#modal').hidden=false;$('#modal').innerHTML=`<div class="sheet"><h2>${w.d}: ${w.t}</h2><ul class="sum" style="padding-left:20px">${q.map(x=>{const e=EX[x.id];return`<li>${e.e} ${e.n}: ${e.t==='rep'?x.sets+' hiệp × '+x.reps+' rep':(x.sets>1?x.sets+' hiệp × ':'')+x.secs+' giây'}</li>`}).join('')}</ul><div class="row"><button class="pri" onclick="start(WK[${i}].l.map(wit))">Bắt đầu buổi này</button><button onclick="closeM()">Đóng</button></div></div>`}
+function openDay(i){const w=WK[i],q=w.l.map(wit);$('#modal').hidden=false;$('#modal').innerHTML=`<div class="sheet"><h2>${w.d}: ${w.t}</h2><ul class="sum" style="padding-left:20px">${q.map(x=>{const e=EX[x.id];return`<li>${e.e} ${e.n}: ${e.t==='rep'?x.reps+' rep':(x.sets>1?x.sets+' hiệp × ':'')+x.secs+' giây'}</li>`}).join('')}</ul><div class="row"><button class="pri" onclick="start(WK[${i}].l.map(wit))">Bắt đầu buổi này</button><button onclick="closeM()">Đóng</button></div></div>`}
 function weekHtml(){const ds=new Set(store.get('h',[]).map(x=>x.d)),td=(new Date().getDay()+6)%7;
  return`<div class="week">${WK.map((w,i)=>{const ws=[].concat(w.w),done=ws.some(k=>ds.has(new Date(Date.now()+(k-td)*864e5).toLocaleDateString('sv-SE')));return`<div class="day${ws.includes(td)?' on':''}"><span class="mu">${w.d}${done?' ✔':''}</span><b>${w.t}</b><button class="pri" onclick="start(WK[${i}].l.map(wit))">Bắt đầu buổi này</button></div>`}).join('')}</div>`}
 function todayNote(){const td=(new Date().getDay()+6)%7,s=WK.find(w=>[].concat(w.w).includes(td));if(s)return'Hôm nay: '+s.t;const n=WK.map(w=>[Math.min(...[].concat(w.w).map(k=>(k-td+7)%7)),w]).sort((a,b)=>a[0]-b[0])[0][1];return'Hôm nay nghỉ. Buổi tiếp theo: '+n.d+', '+n.t}
@@ -192,7 +235,7 @@ class Tracker{constructor(ex){if(ex.reset)ex.reset();this.ex=ex;this.ms=ex.perSi
   const ms=[];
   this.ms.forEach((m,i)=>{const s=ex.perSide?i:-1,v=ex.m(l,s),is=v==null||!ex.iss?[]:ex.iss(l,s),r=m.step(v,is);if(v!=null&&m.ph==='act')ms.push(...is);
    if(!r)return;if(r.type==='short'){this.note=['Biên độ chưa đủ, chưa tính rep',performance.now()+2000,1];return}
-   if(r.dur<500&&ex.id!=='jack')r.issues.push('Chậm lại, hạ 2 giây và nâng 1 giây');
+   if(r.dur<500&&(ex.base||ex.id)!=='jack')r.issues.push('Chậm lại, hạ 2 giây và nâng 1 giây');
    this.c[i]++;let q=100-20*r.issues.length-((ex.dir<0?r.best>ex.good:r.best<ex.good)?15:0);q=Math.max(30,q);this.sc.push(q);
    this.note=[r.issues[0]||'Rep đẹp',performance.now()+2000,r.issues.length?1:0];ev.push({q,issue:r.issues[0]})});
   this.msg=ms[0]||'';return ev}}
@@ -214,23 +257,22 @@ async function ensureCam(){if(camOn||!useCam)return;const o=$('#ovl');o.textCont
  try{await startCam();o.textContent=''}catch(e){stopCam();if(!S)return;useCam=false;o.innerHTML='<div></div><button class="pri" onclick="retryCam()">Thử lại</button>';o.firstChild.textContent=(e&&e.message||'Không bật được camera')+'. Các bài đếm rep cần camera để hoạt động.'}}
 function retryCam(){useCam=true;ensureCam()}
 function ready(l){const x=EX[item().id];if(x.t==='timed')return true;const vs=x.perSide?[x.m(l,0),x.m(l,1)]:[x.m(l)];return vs.some(v=>v!=null&&(x.t==='hold'?v>=150:x.rest(v)))}
-const CON=[[11,12],[11,13],[13,15],[12,14],[14,16],[11,23],[12,24],[23,24],[23,25],[25,27],[24,26],[26,28]];
 function onRes(r){const now=performance.now(),dt=Math.min((now-last)/1000,.3);last=now;const l=r.poseLandmarks;let bad=false;
  if(S&&S.ph==='rest'){try{S.ready=l&&ready(l)?S.ready+dt:0}catch{S.ready=0}}
  if(S&&S.ph==='work'&&!S.paused&&T&&T.ex.t!=='timed'){
   if(l){const before=T.reps,ev=T.update(l,dt);bad=!!T.msg;
-   if(T.reps>before){const it=item(),per=it.reps,r=T.reps,tot=per*it.sets;let sp=0;if(r%per===0&&r<tot){say('Xong hiệp '+r/per+(HAND(1)?'. Hiệp '+(r/per+1)+', kéo tạ '+HAND(r/per+1):''));sp=1;if(!T.note||!T.note[2])T.note=['Xong hiệp '+r/per+'/'+it.sets+', tiếp tục hiệp '+(r/per+1),now+2500,0]}else if(r<tot&&cheer(r,tot,per))sp=1;else say(String((r-1)%per+1));const e=ev[ev.length-1];if(!sp&&e&&e.issue&&e.q<80)setTimeout(()=>say(e.issue),600)}
+   if(T.reps>before){const it=item(),r=T.reps,tot=it.reps,w=SWAP[it.id];let sp=0;if(w&&r%w===0&&r<tot){say(r+', đổi sang '+HAND(r));sp=1;if(!T.note||!T.note[2])T.note=['Đổi sang '+HAND(r),now+2500,0]}else if(r<tot&&cheer(r,tot,tot))sp=1;else say(String(r));const e=ev[ev.length-1];if(!sp&&e&&e.issue&&e.q<80)setTimeout(()=>say(e.issue),600)}
    if(T.msg&&now-(T.said||0)>6000){T.said=now;say(T.msg)}
-   {const it=item();if(T.ex.t==='hold'){cheer(Math.floor(T.hold),it.secs*it.sets,it.secs);const k=Math.floor(T.hold/it.secs);if(k>(T.hk||0)&&k<it.sets){T.hk=k;say('Xong hiệp '+k)}}
+   {const it=item();if(T.ex.t==='hold'){cheer(Math.floor(T.hold),it.secs*it.sets,it.secs);}
    if(T.ex.t==='hold'?T.hold>=it.secs*it.sets:T.reps>=it.reps*it.sets)endSet()}}
   else T.msg='Không thấy bạn, hãy lùi ra để camera thấy toàn thân'}
- if(!cx)return;cx.drawImage(r.image,0,0,VW,VH);if(l){cx.lineWidth=Math.max(3,VW/200);cx.strokeStyle=bad?'#ff7a59':'#4cc9f0';CON.forEach(([a,b])=>{if(l[a].visibility>.4&&l[b].visibility>.4){cx.beginPath();cx.moveTo(l[a].x*VW,l[a].y*VH);cx.lineTo(l[b].x*VW,l[b].y*VH);cx.stroke()}});cx.fillStyle='#fff';[11,12,13,14,15,16,23,24,25,26,27,28].forEach(i=>{if(l[i].visibility>.4){cx.beginPath();cx.arc(l[i].x*VW,l[i].y*VH,Math.max(4,VW/160),0,7);cx.fill()}})}live()}
+ if(cx)cx.drawImage(r.image,0,0,VW,VH);live()}
 /* ===== Buổi tập ===== */
-const item=()=>S.q[S.i],exd=()=>EX[item().id],isTimer=()=>exd().t==='timed',HAND=h=>exd().id==='onerow'?(h%2?'tay phải':'tay trái'):'';
+const item=()=>S.q[S.i],exd=()=>EX[item().id],isTimer=()=>exd().t==='timed',HAND=n=>{const w=SWAP[exd().id];return w?(Math.floor(n/w)%2?'tay trái':'tay phải'):''};
 let WL=null;const wake=async()=>{try{if(navigator.wakeLock&&!WL){WL=await navigator.wakeLock.request('screen');WL.addEventListener('release',()=>{WL=null})}}catch{}},unwake=()=>{try{WL&&WL.release()}catch{}WL=null};
 function start(q){wake();closeM();camOff();S={q,i:0,set:1,ph:'work',t0:Date.now(),res:[],paused:false,rest:0,sec:0};useCam=true;sessView();cx=$('#cv').getContext('2d');beginSet();if(!tick)tick=setInterval(onTick,250)}
 function sessView(){$('#app').className='full';document.body.classList.add('in');$('#app').innerHTML=`<div class="cam" style="--ar:${innerHeight>innerWidth?.5625:1.7778}"><canvas id="cv" width="1280" height="720"></canvas><div id="ovl" class="ovl"></div><div id="hud" class="hud"></div></div>`}
-function beginSet(){T=new Tracker(exd());S.ph=S.set===1?'demo':'work';S.sec=0;S.dm=0;paint();if(S.ph==='demo')runDemo();say(exd().n+(S.set>1?', hiệp '+S.set:'')+(HAND(1)?', hiệp 1, kéo tạ '+HAND(1):''));ensureCam()}
+function beginSet(){T=new Tracker(exd());S.ph=S.set===1?'demo':'work';S.sec=0;S.dm=0;paint();if(S.ph==='demo')runDemo();say(exd().n+(S.set>1?', hiệp '+S.set:'')+(HAND(0)?', bắt đầu bằng '+HAND(0):''));if(!isTimer())ensureCam()}
 // ---- Video hướng dẫn (hoạt hình người que) ----
 // pose = [hipX,hipY,góc thân,góc cánh tay trên,góc cẳng tay,góc đùi,góc cẳng chân,(đùi 2,cẳng chân 2)]; góc 0 = hướng xuống, 90 = sang phải, 180 = lên
 const POSE={arm:[[100,74,180,90,90,8,8],[100,74,180,150,150,8,8],1],hipc:[[92,74,172,50,-40,8,8],[108,74,188,50,-40,8,8],1],
@@ -251,7 +293,7 @@ function draw(sv,id,k){const d=POSE[id];if(!d)return;const A=ext(d[0]),B=ext(d[1
  lb=(o,a1,a2,l1,l2,c)=>{const j=pt(o[0],o[1],a1,l1),e=pt(j[0],j[1],a2,l2);return ln(o,j,c)+ln(j,e,c)},FAR='#7fa6c0',NEAR='#fff',m=d[2],hp=[x,y];
  sv.innerHTML=`<line x1="8" y1="132" x2="192" y2="132" stroke="#fff4" stroke-width="2"/>`+(m?lb(sd,-ua,-fa,22,20,FAR)+lb(hp,-th,-sh,28,28,FAR):lb(hp,t2,s2,28,28,FAR))+lb(hp,th,sh,28,28,NEAR)+ln(hp,sd,NEAR)+lb(sd,ua,fa,22,20,NEAR)+`<circle cx="${hd[0]}" cy="${hd[1]}" r="9" fill="none" stroke="#fff" stroke-width="4"/>`}
 let dmR=0;const demoLen=()=>Math.max(9,exd().s.length*3.5);
-function runDemo(){if(dmR)return;dmR=1;const t0=performance.now();(function f(){const sv=$('#fig');if(!S||S.ph!=='demo'||!sv){dmR=0;return}const e=exd(),t=(performance.now()-t0)/1000;if(sv.tagName!=='IMG')draw(sv,item().id,(1-Math.cos(t*2*Math.PI/3.2))/2);const n=Math.floor(t/3)%e.s.length;e.s.forEach((_,i)=>{const o=$('#st'+i);if(o)o.classList.toggle('on',i===n)});requestAnimationFrame(f)})()}
+function runDemo(){if(dmR)return;dmR=1;const t0=performance.now();(function f(){const sv=$('#fig');if(!S||S.ph!=='demo'||!sv){dmR=0;return}const e=exd(),t=(performance.now()-t0)/1000;if(sv.tagName!=='IMG')draw(sv,e.base||item().id,(1-Math.cos(t*2*Math.PI/3.2))/2);const n=Math.floor(t/3)%e.s.length;e.s.forEach((_,i)=>{const o=$('#st'+i);if(o)o.classList.toggle('on',i===n)});requestAnimationFrame(f)})()}
 function demoHtml(e){return `<div class="rest demo">${e.g&&GIF[e.g]?`<img id="fig" src="${GIF[e.g]}" alt="${e.n}">`:'<svg id="fig" viewBox="0 -14 200 154"></svg>'}<div class="row"><button class="pri" onclick="go()">Bắt đầu ngay (5)</button></div></div>`}
 function go(){if(!S||S.ph!=='demo')return;S.ph='work';S.sec=0;T=new Tracker(exd());paint()}
 function fs(){const c=$('.cam');if(document.fullscreenElement)document.exitFullscreen();else if(c&&c.requestFullscreen)c.requestFullscreen().catch(()=>{})}
@@ -260,12 +302,12 @@ function paint(){const e=exd(),it=item(),rest=S.ph==='rest';
  <div class="top"><div class="nm">${e.g&&GIF[e.g]?`<img class="ni" src="${GIF[e.g]}" alt="">`:`<i>${e.e}</i>`}<h2>${e.n}</h2></div>
  <div class="btns">${rest?'':'<button onclick="skipEx()">Bỏ qua bài</button>'}${document.fullscreenEnabled?'<button onclick="fs()" aria-label="Toàn màn hình">⛶</button>':''}<button onclick="quit()">Thoát</button></div></div>
  ${S.ph==='demo'?demoHtml(e):rest?`<div class="rest"><h2>Nghỉ ngơi</h2><div class="nxt" id="nx"></div><div class="sub">Sẵn sàng thì vào vị trí, bài sẽ tự bắt đầu</div><div class="row"><button class="pri" onclick="beginSet()">Bắt đầu ngay</button></div></div>`
- :`<div class="bot"><div id="msg" class="msg"></div><div class="rb"><b id="rpb"></b>${isTimer()?'':Array.from({length:it.sets-1},(_,i)=>`<i style="left:${(i+1)/it.sets*100}%"></i>`).join('')}<span id="rt"></span></div></div>`}`;live()}
+ :`<div class="bot"><div id="msg" class="msg"></div><div class="rb"><b id="rpb"></b><span id="rt"></span></div></div>`}`;live()}
 function live(){if(!S||!$('#pg'))return;const e=exd(),it=item(),tot=S.q.reduce((a,x)=>a+x.sets,0),done=S.q.slice(0,S.i).reduce((a,x)=>a+x.sets,0)+(isTimer()?S.set-1:0);let f=0,lab='';
  if(S.ph==='demo'){}else if(S.ph==='rest'){$('#nx').textContent=(S.set>1?'Hiệp tiếp theo: ':'Qua bài tiếp theo: ')+e.n+(S.set>1?', hiệp '+S.set+'/'+it.sets:'')}
  else{let v,tg,m='',bad=0;
   if(isTimer()){v=Math.max(0,Math.ceil(it.secs-S.sec));tg='giây còn lại';f=S.sec/it.secs;m=e.s[Math.min(e.s.length-1,Math.floor(S.sec/(it.secs/e.s.length)))]}
-  else{const per=e.t==='hold'?it.secs:it.reps,tt=per*it.sets,cur=e.t==='hold'?T.hold:T.reps;lab=it.sets>1?'Hiệp '+Math.min(it.sets,Math.floor(cur/per)+1)+'/'+it.sets+' · ':'';if(HAND(1)&&lab)lab=lab.replace(/ · $/,' · '+HAND(Math.min(it.sets,Math.floor(cur/per)+1))+' · ');if(e.t==='hold'){v=Math.floor(T.hold);tg='/ '+tt+' giây giữ';f=T.hold/tt}else{v=T.reps;tg='/ '+tt+' rep';f=T.reps/tt}
+  else{const per=e.t==='hold'?it.secs:it.reps,tt=per*it.sets,cur=e.t==='hold'?T.hold:T.reps;lab=HAND(0)?HAND(Math.min(cur,tt-1))+' · ':'';if(e.t==='hold'){v=Math.floor(T.hold);tg='/ '+tt+' giây giữ';f=T.hold/tt}else{v=T.reps;tg='/ '+tt+' rep';f=T.reps/tt}
    const nt=T.note&&T.note[1]>performance.now()?T.note:null;
    if(camOn){m=T.msg||(nt?nt[0]:(e.t==='hold'?(T.hold>0?'Giữ vững':'Vào tư thế plank, nằm nghiêng trước camera'):T.reps?'Form tốt':''));bad=!!T.msg||(nt&&nt[2])}
    else m=''}
@@ -292,7 +334,7 @@ function camOff(){}
 let duckTimer=null;
 function duckHtml(){if(duckTimer){clearInterval(duckTimer);duckTimer=null}if(!window.DuckBridge)return'';const d=JSON.parse(DuckBridge.state());if(!d)return'';
  const pre=d.tired?'tired':'fit';let i=0;
- duckTimer=setInterval(()=>{const im=$('#duckImg');if(!im){clearInterval(duckTimer);duckTimer=null;return}i=(i+1)%4;im.src=`duck/${pre}_${i}.png`},d.tired?650:350);
+ duckTimer=setInterval(()=>{const im=$('#duckImg');if(!im){clearInterval(duckTimer);duckTimer=null;return}i=(i+1)%4;im.src=`duck/${pre}_${i}.png`},d.tired?1950:1050);
  return`<h3>Vịt của bạn</h3><div class="plant"><img id="duckImg" src="duck/${pre}_0.png" alt="Vịt"><div><b>${d.title}</b><span class="mu">${d.status}</span><br><button onclick="DuckBridge.pinWidget()">Thêm widget ra màn hình</button></div></div>`}
 function duckRefresh(){const b=$('#duckBox');if(b&&!S)b.innerHTML=duckHtml()}
 /* ===== Giao diện ===== */
@@ -325,6 +367,6 @@ function sayCheer(){if(!S||!CHEER.length)return;if(!S.cu)S.cu=new Set();if(S.cu.
 setInterval(()=>{if(!S||S.ph!=='work'||S.paused)return;if(!S.cn){S.cn=cdel();S.ct=0}if(++S.ct>=S.cn){const e=exd(),it=item(),per=e.t==='rep'?it.reps:it.secs,pos=e.t==='rep'?T.reps:e.t==='hold'?Math.floor(T.hold):Math.floor((S.set-1)*it.secs+S.sec);S.cw=(S.cw||0)+1;if(!nearB(pos,per)||S.cw>=30)sayCheer()}},1000);
 function enc(){const n=new Date(),d=Math.floor(Date.UTC(n.getFullYear(),n.getMonth(),n.getDate())/864e5);return EN[d%EN.length]}
 function quote(){const n=new Date(),d=Math.floor(Date.UTC(n.getFullYear(),n.getMonth(),n.getDate())/864e5),td=(n.getDay()+6)%7,k=WK.findIndex(w=>[].concat(w.w).includes(td)),a=QT[k<0?QT.length-1:k%(QT.length-1)];return a[Math.floor(d/7)%a.length]}
-function home(){$('#app').className='';document.body.classList.remove('in');$('#app').innerHTML=`<h1>Lịch tập <em>tuần này</em></h1><p class="mu">${quote().replace(/[.!]+$/,'')}${EN.length?', '+escH(enc().replace(/^./,c=>c.toLowerCase())):''}</p><p class="tipb">${todayNote()}</p>${weekHtml()}<div id="duckBox">${duckHtml()}</div>`}
+function home(){$('#app').className='';document.body.classList.remove('in');$('#app').innerHTML=`<h1>Lịch tập <em>tuần này</em></h1><p class="mu">${quote().replace(/[.!]+$/,'')}${EN.length?', '+escH(enc().replace(/^./,c=>c.toLowerCase())):''}</p><p class="tipb">${todayNote()}</p>${weekHtml()}${customHtml()}<div id="duckBox">${duckHtml()}</div>`}
 $('#cfgb').onclick=openCfg;$('#modal').onclick=e=>{if(e.target.id==='modal'){camOff();closeM()}};home();
 </script></body></html>
